@@ -1,7 +1,7 @@
 package com.spedine.trackit.dto;
 
 import com.spedine.trackit.model.ECurrency;
-import com.spedine.trackit.model.EExpenseCategory;
+import com.spedine.trackit.model.ECategory;
 import com.spedine.trackit.model.EPaymentMethod;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
@@ -18,7 +18,7 @@ public record UpdateExpenseRequest(
         String description,
         @PastOrPresent
         LocalDateTime expenseDate,
-        EExpenseCategory category,
+        ECategory category,
         ECurrency currency,
         EPaymentMethod paymentMethod
 ) {

@@ -1,7 +1,7 @@
 package com.spedine.trackit.dto;
 
 import com.spedine.trackit.model.ECurrency;
-import com.spedine.trackit.model.EExpenseCategory;
+import com.spedine.trackit.model.ECategory;
 import com.spedine.trackit.model.EPaymentMethod;
 import com.spedine.trackit.model.Expense;
 
@@ -15,7 +15,7 @@ public record ExpenseResponse(
         String description,
         LocalDateTime expenseDate,
         LocalDateTime createdAt,
-        EExpenseCategory category,
+        ECategory category,
         ECurrency currency,
         EPaymentMethod paymentMethod
 ) {

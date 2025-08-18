@@ -25,7 +25,7 @@ public class Expense {
     private LocalDateTime expenseDate;
 
     @Enumerated(EnumType.STRING)
-    private EExpenseCategory category;
+    private ECategory category;
 
     @Enumerated(EnumType.STRING)
     private ECurrency currency;
@@ -71,11 +71,11 @@ public class Expense {
         this.expenseDate = expenseDate;
     }
 
-    public EExpenseCategory getCategory() {
+    public ECategory getCategory() {
         return category;
     }
 
-    public void setCategory(EExpenseCategory category) {
+    public void setCategory(ECategory category) {
         this.category = category;
     }
 

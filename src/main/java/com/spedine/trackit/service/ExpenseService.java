@@ -1,11 +1,9 @@
 package com.spedine.trackit.service;
 
-import com.spedine.trackit.dto.CreateExpenseRequest;
-import com.spedine.trackit.dto.ExpenseFilter;
-import com.spedine.trackit.dto.ExpenseResponse;
-import com.spedine.trackit.dto.UpdateExpenseRequest;
+import com.spedine.trackit.dto.*;
 import com.spedine.trackit.model.Expense;
 import com.spedine.trackit.model.User;
+import com.spedine.trackit.projection.ExpenseCountAndTotalProjection;
 import com.spedine.trackit.repository.ExpenseRepository;
 import com.spedine.trackit.specification.ExpenseSpecification;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Service
@@ -79,5 +80,33 @@ public class ExpenseService {
             throw new EntityNotFoundException("Expense not found");
         }
         return expense;
+    }
+
+    public ExpenseSummaryResponse getExpenseSummary(User user, LocalDate startDate, LocalDate endDate) {
+        if (startDate == null) {
+            startDate = LocalDate.now().withDayOfMonth(1);
+        }
+
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date must be before end date");
+        }
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+        ExpenseCountAndTotalProjection expenseCountAndTotal = expenseRepository.countAndSumTotalAmount(user.getId(), startDateTime, endDateTime);
+
+        return new ExpenseSummaryResponse(
+                startDate, endDate,
+                expenseRepository.groupByCurrencyAndSumAmount(user.getId(), startDateTime, endDateTime),
+                expenseRepository.groupByExpenseCategoryAndSumAmount(user.getId(), startDateTime, endDateTime),
+                expenseRepository.getMostUsedPaymentMethod(user.getId(), startDateTime, endDateTime),
+                expenseCountAndTotal.getTotalExpense(),
+                expenseCountAndTotal.getCount()
+        );
     }
 }

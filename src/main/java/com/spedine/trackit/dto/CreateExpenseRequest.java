@@ -1,7 +1,7 @@
 package com.spedine.trackit.dto;
 
 import com.spedine.trackit.model.ECurrency;
-import com.spedine.trackit.model.EExpenseCategory;
+import com.spedine.trackit.model.ECategory;
 import com.spedine.trackit.model.EPaymentMethod;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -23,7 +23,7 @@ public record CreateExpenseRequest(
         @PastOrPresent
         LocalDateTime expenseDate,
         @NotNull
-        EExpenseCategory category,
+        ECategory category,
         @NotNull
         ECurrency currency,
         @NotNull

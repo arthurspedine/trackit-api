@@ -1,6 +1,6 @@
 package com.spedine.trackit.model;
 
-public enum EExpenseCategory {
+public enum ECategory {
     FOOD,
     TRANSPORT,
     RENT,
