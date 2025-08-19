@@ -28,7 +28,7 @@ public class ExpenseController {
     public ResponseEntity<MessageResponse> createExpense(@RequestBody @Valid CreateExpenseRequest body) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         expenseService.save(body, user);
-        return ResponseEntity.ok(new MessageResponse("Expense created successfully"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Expense created successfully"));
     }
 
     @GetMapping
