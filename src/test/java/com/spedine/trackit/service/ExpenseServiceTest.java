@@ -23,6 +23,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -80,8 +81,18 @@ class ExpenseServiceTest {
     @Test
     @DisplayName("Should find all expenses with pagination and filtering")
     void findAll() {
-        ExpenseFilter filter = new ExpenseFilter(null, null, null, null, null, null);
+        ExpenseFilter filter = new ExpenseFilter(
+                String.valueOf(LocalDate.now().getMonthValue()),
+                LocalDate.now().atStartOfDay(), LocalDate.now().atTime(LocalTime.MAX),
+                createBody.currency(), createBody.category(), createBody.paymentMethod());
         Expense expense = new Expense();
+        expense.setAmount(createBody.amount());
+        expense.setDescription(createBody.description());
+        expense.setExpenseDate(createBody.expenseDate());
+        expense.setCategory(createBody.category());
+        expense.setCurrency(createBody.currency());
+        expense.setPaymentMethod(createBody.paymentMethod());
+        expense.setUser(user);
         Page<Expense> page = new PageImpl<>(List.of(expense));
 
         when(expenseRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
