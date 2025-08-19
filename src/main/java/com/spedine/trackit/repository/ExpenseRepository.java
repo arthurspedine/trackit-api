@@ -19,7 +19,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
     Optional<Expense> findByIdAndUser_Id(UUID id, UUID userId);
 
     @Query(value = """
-                SELECT COUNT(DISTINCT e.expenseDate) as count, COALESCE(SUM(e.amount), 0) AS totalExpense
+                SELECT COUNT(e) as count, COALESCE(SUM(e.amount), 0) AS totalExpense
                 FROM Expense e
                 WHERE e.user.id = :userId
                   AND e.expenseDate BETWEEN :startDate AND :endDate
