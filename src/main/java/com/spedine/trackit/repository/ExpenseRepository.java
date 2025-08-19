@@ -12,10 +12,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpecificationExecutor<Expense> {
-    Expense findByIdAndUser_Id(UUID id, UUID userId);
+    Optional<Expense> findByIdAndUser_Id(UUID id, UUID userId);
 
     @Query(value = """
                 SELECT COUNT(DISTINCT e.expenseDate) as count, COALESCE(SUM(e.amount), 0) AS totalExpense

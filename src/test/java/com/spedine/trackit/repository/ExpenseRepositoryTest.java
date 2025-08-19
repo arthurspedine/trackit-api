@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -147,17 +148,17 @@ class ExpenseRepositoryTest {
                 user
         );
 
-        Expense savedExpense = expenseRepository.findByIdAndUser_Id(expense.getId(), user.getId());
+        Optional<Expense> savedExpense = expenseRepository.findByIdAndUser_Id(expense.getId(), user.getId());
 
-        assertThat(savedExpense).isNotNull();
+        assertThat(savedExpense).isNotEmpty();
     }
 
     @Test
     @DisplayName("Should not return an expense by ID and user ID")
     void findByIdAndUser_Id2() {
-        Expense savedExpense = expenseRepository.findByIdAndUser_Id(UUID.randomUUID(), user.getId());
+        Optional<Expense> savedExpense = expenseRepository.findByIdAndUser_Id(UUID.randomUUID(), user.getId());
 
-        assertThat(savedExpense).isNull();
+        assertThat(savedExpense).isEmpty();
     }
 
     @Test

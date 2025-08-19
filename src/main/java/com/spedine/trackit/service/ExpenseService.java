@@ -75,11 +75,8 @@ public class ExpenseService {
     }
 
     private Expense findByIdAndUser(UUID id, UUID userId) {
-        Expense expense = expenseRepository.findByIdAndUser_Id(id, userId);
-        if (expense == null) {
-            throw new EntityNotFoundException("Expense not found");
-        }
-        return expense;
+        return expenseRepository.findByIdAndUser_Id(id, userId)
+                .orElseThrow(() -> new EntityNotFoundException("Expense not found"));
     }
 
     public ExpenseSummaryResponse getExpenseSummary(User user, LocalDate startDate, LocalDate endDate) {
