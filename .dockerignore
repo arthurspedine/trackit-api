@@ -1,0 +1,26 @@
+# Ignore git files
+.git/
+.gitattributes
+
+# Ignore Gradle build files and directories
+.gradle/
+
+# Ignore IntelliJ IDEA project files
+.idea/
+
+# Ignore build output
+build/
+
+# Ignore test source files
+src/test/
+
+# Ignore documentation files (optional, if you don't want them in the image)
+README.md
+HELP.md
+
+# Ignore the Dockerfile itself (if it's not needed in the image)
+Dockerfile
+
+# System
+.DS_Store
+Thumbs.db

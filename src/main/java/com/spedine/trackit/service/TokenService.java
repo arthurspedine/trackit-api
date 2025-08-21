@@ -22,7 +22,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer(" TrackItAPI")
+                    .withIssuer("TrackIt API")
                     .withSubject(user.getUsername())
                     .withExpiresAt(expirationDate())
                     .sign(algorithm);
@@ -35,7 +35,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer(" TrackItAPI")
+                    .withIssuer("TrackIt API")
                     .build()
                     .verify(token)
                     .getSubject();
