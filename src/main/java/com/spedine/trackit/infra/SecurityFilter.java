@@ -1,5 +1,6 @@
 package com.spedine.trackit.infra;
 
+import com.spedine.trackit.infra.exception.JwtAuthenticationException;
 import com.spedine.trackit.repository.UserRepository;
 import com.spedine.trackit.service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -29,12 +30,20 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = this.getBearerToken(request);
+
         if (jwt != null) {
-            String email = tokenService.getSubject(jwt);
-            UserDetails userDetails = userRepository.findByEmail(email);
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                String email = tokenService.getSubject(jwt);
+                UserDetails userDetails = userRepository.findByEmail(email);
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } catch (Exception e) {
+                SecurityContextHolder.clearContext();
+                throw new JwtAuthenticationException("Invalid JWT token");
+            }
         }
+
         filterChain.doFilter(request, response);
     }
 
