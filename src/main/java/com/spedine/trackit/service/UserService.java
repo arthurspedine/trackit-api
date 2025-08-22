@@ -4,6 +4,7 @@ import com.spedine.trackit.dto.UserRegisterRequest;
 import com.spedine.trackit.model.User;
 import com.spedine.trackit.repository.UserRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UserService {
     public void registerUser(@Valid UserRegisterRequest body) {
         UserDetails user = userRepository.findByEmail(body.email());
         if (user != null) {
-            throw new IllegalArgumentException("User with this email already exists");
+            throw new ValidationException("User with this email already exists");
         }
         User newUser = new User();
         newUser.setName(body.name());
