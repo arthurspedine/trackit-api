@@ -40,10 +40,11 @@ public class ExpenseService {
         expenseRepository.save(expense);
     }
 
-    public Page<ExpenseResponse> findAll(User user, int page, int size, ExpenseFilter filter) {
+    public PageResponse<ExpenseResponse> findAll(User user, int page, int size, ExpenseFilter filter) {
         Specification<Expense> specification = ExpenseSpecification.withFilters(user.getId(), filter);
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "expenseDate");
-        return expenseRepository.findAll(specification, pageable).map(ExpenseResponse::fromEntity);
+        Page<ExpenseResponse> expenses = expenseRepository.findAll(specification, pageable).map(ExpenseResponse::fromEntity);
+        return new PageResponse<>(expenses);
     }
 
     public ExpenseResponse update(UUID id, UpdateExpenseRequest body, User user) {

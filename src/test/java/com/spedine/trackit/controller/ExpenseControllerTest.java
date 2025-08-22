@@ -1,12 +1,7 @@
 package com.spedine.trackit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spedine.trackit.dto.CreateExpenseRequest;
-import com.spedine.trackit.dto.ExpenseFilter;
-import com.spedine.trackit.dto.ExpenseResponse;
-import com.spedine.trackit.dto.ExpenseSummaryResponse;
-import com.spedine.trackit.dto.PaymentMethodSummary;
-import com.spedine.trackit.dto.UpdateExpenseRequest;
+import com.spedine.trackit.dto.*;
 import com.spedine.trackit.infra.SecurityFilter;
 import com.spedine.trackit.model.ECategory;
 import com.spedine.trackit.model.ECurrency;
@@ -497,7 +492,7 @@ class ExpenseControllerTest {
         );
 
         when(expenseService.findAll(eq(mockUser), eq(0), eq(10), any(ExpenseFilter.class)))
-                .thenReturn(mockPage);
+                .thenReturn(new PageResponse<>(mockPage));
 
         mockMvc.perform(
                 get("/api/expenses")
@@ -508,7 +503,7 @@ class ExpenseControllerTest {
                 .andExpect(jsonPath("$.content.length()").value(2))
                 .andExpect(jsonPath("$.totalElements").value(2))
                 .andExpect(jsonPath("$.size").value(10))
-                .andExpect(jsonPath("$.number").value(0));
+                .andExpect(jsonPath("$.page").value(0));
     }
 
     @Test
@@ -522,7 +517,7 @@ class ExpenseControllerTest {
         );
 
         when(expenseService.findAll(eq(mockUser), eq(1), eq(5), any(ExpenseFilter.class)))
-                .thenReturn(mockPage);
+                .thenReturn(new PageResponse<>(mockPage));
 
         mockMvc.perform(
                 get("/api/expenses")
@@ -533,7 +528,7 @@ class ExpenseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.size").value(5))
-                .andExpect(jsonPath("$.number").value(1));
+                .andExpect(jsonPath("$.page").value(1));
     }
 
     @Test
@@ -547,7 +542,7 @@ class ExpenseControllerTest {
         );
 
         when(expenseService.findAll(eq(mockUser), eq(0), eq(10), any(ExpenseFilter.class)))
-                .thenReturn(mockPage);
+                .thenReturn(new PageResponse<>(mockPage));
 
         mockMvc.perform(
                 get("/api/expenses")

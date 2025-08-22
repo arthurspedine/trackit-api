@@ -4,7 +4,6 @@ import com.spedine.trackit.dto.*;
 import com.spedine.trackit.model.User;
 import com.spedine.trackit.service.ExpenseService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ExpenseResponse>> getExpenses(
+    public ResponseEntity<PageResponse<ExpenseResponse>> getExpenses(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @ModelAttribute ExpenseFilter filter

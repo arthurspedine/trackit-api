@@ -99,10 +99,10 @@ class ExpenseServiceTest {
 
         when(expenseRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
 
-        Page<ExpenseResponse> result = expenseService.findAll(user, 0, 10, filter);
-        assertEquals(1, result.getTotalElements());
-        assertEquals(ExpenseResponse.fromEntity(expense), result.getContent().get(0));
-        assertEquals(1, result.getTotalPages());
+        PageResponse<ExpenseResponse> result = expenseService.findAll(user, 0, 10, filter);
+        assertEquals(1, result.totalElements());
+        assertEquals(ExpenseResponse.fromEntity(expense), result.content().get(0));
+        assertEquals(1, result.totalPages());
     }
 
     @Test
