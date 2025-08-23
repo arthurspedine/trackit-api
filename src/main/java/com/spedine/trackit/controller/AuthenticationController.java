@@ -3,17 +3,13 @@ package com.spedine.trackit.controller;
 import com.spedine.trackit.dto.MessageResponse;
 import com.spedine.trackit.dto.UserLoginRequest;
 import com.spedine.trackit.dto.UserRegisterRequest;
-import com.spedine.trackit.model.UserEntity;
-import com.spedine.trackit.service.TokenService;
+import com.spedine.trackit.service.AuthenticationService;
 import com.spedine.trackit.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,13 +23,11 @@ import java.util.Map;
 public class AuthenticationController {
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+    private final AuthenticationService authenticationService;
 
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, TokenService tokenService) {
+    public AuthenticationController(UserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/register")
@@ -52,9 +46,7 @@ public class AuthenticationController {
             description = "Authenticate with email and password to receive a JWT token. Public route (no bearer token required)."
     )
     public ResponseEntity<Map<String, String>> login(@RequestBody @Valid UserLoginRequest body) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(body.email(), body.password());
-        Authentication auth = authenticationManager.authenticate(authToken);
-        String token = tokenService.genToken(((UserEntity) auth.getPrincipal()).toDomain());
+        String token = authenticationService.authenticateAndGenerateToken(body);
         return ResponseEntity.ok(Map.of("token", token));
     }
 }
