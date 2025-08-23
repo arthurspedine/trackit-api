@@ -6,6 +6,8 @@ import com.spedine.trackit.dto.UserRegisterRequest;
 import com.spedine.trackit.model.UserEntity;
 import com.spedine.trackit.service.TokenService;
 import com.spedine.trackit.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "Public endpoints for user registration and login. No bearer token required.")
 public class AuthenticationController {
 
     private final UserService userService;
@@ -34,12 +37,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
+    @Operation(
+            summary = "Register user",
+            description = "Create a new user account. Public route (no bearer token required)."
+    )
     public ResponseEntity<MessageResponse> register(@RequestBody @Valid UserRegisterRequest body) {
         userService.registerUser(body);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("User registered successfully"));
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login",
+            description = "Authenticate with email and password to receive a JWT token. Public route (no bearer token required)."
+    )
     public ResponseEntity<Map<String, String>> login(@RequestBody @Valid UserLoginRequest body) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(body.email(), body.password());
         Authentication auth = authenticationManager.authenticate(authToken);
