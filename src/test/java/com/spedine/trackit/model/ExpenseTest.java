@@ -30,10 +30,7 @@ class ExpenseTest {
 
     @BeforeEach
     void setUp() {
-        validUser = new User();
-        validUser.setName("Test User");
-        validUser.setEmail("test@example.com");
-        validUser.setPassword("password");
+        validUser = new User("Test User", "test@example.com", "password");
 
         validAmount = new BigDecimal("100.50");
         validDescription = "Valid expense description";
@@ -385,9 +382,7 @@ class ExpenseTest {
         void shouldUpdateUserWhenValid() {
             Expense expense = new Expense(validAmount, validDescription, validExpenseDate,
                     validCategory, validCurrency, validPaymentMethod, validUser);
-            User newUser = new User();
-            newUser.setName("New User");
-            newUser.setEmail("new@example.com");
+            User newUser = new User("New User", "new@example.com", "newpassword");
 
             expense.setUser(newUser);
 

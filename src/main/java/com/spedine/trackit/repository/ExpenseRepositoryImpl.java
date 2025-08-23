@@ -5,6 +5,7 @@ import com.spedine.trackit.dto.PaymentMethodSummary;
 import com.spedine.trackit.model.Expense;
 import com.spedine.trackit.model.ExpenseEntity;
 import com.spedine.trackit.model.User;
+import com.spedine.trackit.model.UserEntity;
 import com.spedine.trackit.projection.ExpenseCategoryProjection;
 import com.spedine.trackit.projection.ExpenseCountAndTotalProjection;
 import com.spedine.trackit.projection.ExpenseCurrencyProjection;
@@ -23,14 +24,17 @@ import java.util.UUID;
 class ExpenseRepositoryImpl implements ExpenseRepository {
 
     private final ExpenseJpaRepository jpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
-    public ExpenseRepositoryImpl(ExpenseJpaRepository jpaRepository) {
+    public ExpenseRepositoryImpl(ExpenseJpaRepository jpaRepository, UserJpaRepository userJpaRepository) {
         this.jpaRepository = jpaRepository;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
     public Expense save(Expense expense) {
-        ExpenseEntity expenseEntity = ExpenseEntity.fromDomain(expense);
+        UserEntity user = userJpaRepository.getReferenceById(expense.getUser().getId());
+        ExpenseEntity expenseEntity = ExpenseEntity.fromDomain(expense, user);
         return jpaRepository.save(expenseEntity).toDomain();
     }
 
@@ -49,7 +53,8 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
 
     @Override
     public void delete(Expense expense) {
-        jpaRepository.delete(ExpenseEntity.fromDomain(expense));
+        UserEntity user = userJpaRepository.getReferenceById(expense.getUser().getId());
+        jpaRepository.delete(ExpenseEntity.fromDomain(expense, user));
     }
 
     @Override

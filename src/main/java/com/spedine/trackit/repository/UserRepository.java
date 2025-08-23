@@ -1,9 +1,8 @@
 package com.spedine.trackit.repository;
 
 import com.spedine.trackit.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    UserDetails findByEmail(String email);
+public interface UserRepository {
+    User save(User user);
+    User findByEmail(String email);
 }

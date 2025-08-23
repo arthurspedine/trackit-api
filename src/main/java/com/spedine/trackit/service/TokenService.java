@@ -23,7 +23,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("TrackIt API")
-                    .withSubject(user.getUsername())
+                    .withSubject(user.getEmail())
                     .withExpiresAt(expirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e) {

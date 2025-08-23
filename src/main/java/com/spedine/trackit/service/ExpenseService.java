@@ -26,6 +26,9 @@ public class ExpenseService {
     }
 
     public void save(CreateExpenseRequest body, User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         Expense expense = new Expense(
                 body.amount(),
                 body.description(),
@@ -94,6 +97,10 @@ public class ExpenseService {
     }
 
     public ExpenseSummaryResponse getExpenseSummary(User user, LocalDate startDate, LocalDate endDate) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
         if (startDate == null) {
             startDate = LocalDate.now().withDayOfMonth(1);
         }

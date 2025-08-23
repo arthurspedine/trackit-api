@@ -32,14 +32,14 @@ public class ExpenseEntity {
     private EPaymentMethod paymentMethod;
 
     @ManyToOne(optional = false)
-    private User user;
+    private UserEntity user;
 
-    public ExpenseEntity() {
+    protected ExpenseEntity() {
     }
 
     public ExpenseEntity(UUID id, BigDecimal amount, String description, LocalDateTime createdAt,
                          LocalDateTime expenseDate, ECategory category, ECurrency currency,
-                         EPaymentMethod paymentMethod, User user) {
+                         EPaymentMethod paymentMethod, UserEntity user) {
         this.id = id;
         this.amount = amount;
         this.description = description;
@@ -51,7 +51,7 @@ public class ExpenseEntity {
         this.user = user;
     }
 
-    public static ExpenseEntity fromDomain(Expense expense) {
+    public static ExpenseEntity fromDomain(Expense expense, UserEntity user) {
         return new ExpenseEntity(
                 expense.getId(),
                 expense.getAmount(),
@@ -61,19 +61,19 @@ public class ExpenseEntity {
                 expense.getCategory(),
                 expense.getCurrency(),
                 expense.getPaymentMethod(),
-                expense.getUser()
+                user
         );
     }
 
     public Expense toDomain() {
-        return new Expense(id, createdAt, amount, description, expenseDate, category, currency, paymentMethod, user);
+        return new Expense(id, createdAt, amount, description, expenseDate, category, currency, paymentMethod, user.toDomain());
     }
 
     public UUID getId() {
         return id;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 }

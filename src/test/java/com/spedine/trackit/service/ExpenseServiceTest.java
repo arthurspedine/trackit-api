@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,17 +45,17 @@ class ExpenseServiceTest {
 
     @BeforeEach
     void setup() {
-        user = new User();
-        user.setName("Test User");
-        user.setEmail("test@test.com");
-        user.setPassword("password");
-        ReflectionTestUtils.setField(user, "id", UUID.randomUUID());
+        user = new User(
+                "Test User",
+                "test@test.com",
+                "password"
+        );
 
-        user2 = new User();
-        user2.setName("Test User 2");
-        user2.setEmail("test2@test.com");
-        user2.setPassword("password");
-        ReflectionTestUtils.setField(user2, "id", UUID.randomUUID());
+        user2 = new User(
+                "Test User 2",
+                "test2@test.com",
+                "password"
+        );
 
         createBody = new CreateExpenseRequest(
                 BigDecimal.valueOf(100.00),

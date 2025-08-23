@@ -3,7 +3,7 @@ package com.spedine.trackit.controller;
 import com.spedine.trackit.dto.MessageResponse;
 import com.spedine.trackit.dto.UserLoginRequest;
 import com.spedine.trackit.dto.UserRegisterRequest;
-import com.spedine.trackit.model.User;
+import com.spedine.trackit.model.UserEntity;
 import com.spedine.trackit.service.TokenService;
 import com.spedine.trackit.service.UserService;
 import jakarta.validation.Valid;
@@ -43,7 +43,7 @@ public class AuthenticationController {
     public ResponseEntity<Map<String, String>> login(@RequestBody @Valid UserLoginRequest body) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(body.email(), body.password());
         Authentication auth = authenticationManager.authenticate(authToken);
-        String token = tokenService.genToken((User)  auth.getPrincipal());
+        String token = tokenService.genToken(((UserEntity) auth.getPrincipal()).toDomain());
         return ResponseEntity.ok(Map.of("token", token));
     }
 }

@@ -5,7 +5,6 @@ import com.spedine.trackit.model.User;
 import com.spedine.trackit.repository.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +20,19 @@ public class UserService {
     }
 
     public void registerUser(@Valid UserRegisterRequest body) {
-        UserDetails user = userRepository.findByEmail(body.email());
+        User user = userRepository.findByEmail(body.email());
         if (user != null) {
             throw new ValidationException("User with this email already exists");
         }
-        User newUser = new User();
-        newUser.setName(body.name());
-        newUser.setEmail(body.email());
         if (!body.password().equals(body.confirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }
         String encodedPassword = passwordEncoder.encode(body.password());
-        newUser.setPassword(encodedPassword);
+        User newUser = new User(body.name(), body.email(), encodedPassword);
         userRepository.save(newUser);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
