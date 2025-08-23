@@ -1,7 +1,7 @@
 package com.spedine.trackit.specification;
 
 import com.spedine.trackit.dto.ExpenseFilter;
-import com.spedine.trackit.model.Expense;
+import com.spedine.trackit.model.ExpenseEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class ExpenseSpecification {
 
-    public static Specification<Expense> withFilters(UUID userId, ExpenseFilter filter) {
+    public static Specification<ExpenseEntity> withFilters(UUID userId, ExpenseFilter filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 

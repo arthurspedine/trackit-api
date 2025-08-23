@@ -40,6 +40,13 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.findAll(user, page, size, filter));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ExpenseResponse> getExpenseById(@PathVariable UUID id) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ExpenseResponse expense = expenseService.findByUserAndId(id, user);
+        return ResponseEntity.ok(expense);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ExpenseResponse> updateExpense(@PathVariable UUID id, @RequestBody @Valid UpdateExpenseRequest body) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

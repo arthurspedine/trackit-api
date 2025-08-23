@@ -19,7 +19,7 @@ public record ExpenseResponse(
         ECurrency currency,
         EPaymentMethod paymentMethod
 ) {
-    public static ExpenseResponse fromEntity(Expense expense) {
+    public static ExpenseResponse fromDomain(Expense expense) {
         return new ExpenseResponse(
                 expense.getId(),
                 expense.getAmount(),

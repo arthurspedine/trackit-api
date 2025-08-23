@@ -1,105 +1,92 @@
 package com.spedine.trackit.model;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "expenses")
 public class Expense {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private BigDecimal amount;
-
     private String description;
-
-    @CreationTimestamp
     private LocalDateTime createdAt;
-
     private LocalDateTime expenseDate;
-
-    @Enumerated(EnumType.STRING)
     private ECategory category;
-
-    @Enumerated(EnumType.STRING)
     private ECurrency currency;
-
-    @Enumerated(EnumType.STRING)
     private EPaymentMethod paymentMethod;
-
-    @ManyToOne(optional = false)
     private User user;
 
-    public Expense() {
+    private Expense() {
     }
 
-    public UUID getId() {
-        return id;
+    public Expense(BigDecimal amount, String description, LocalDateTime expenseDate,
+                   ECategory category, ECurrency currency, EPaymentMethod paymentMethod, User user) {
+        this(null, null, amount, description, expenseDate, category, currency, paymentMethod, user);
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public Expense(UUID id, LocalDateTime createdAt, BigDecimal amount, String description,
+                   LocalDateTime expenseDate, ECategory category, ECurrency currency,
+                   EPaymentMethod paymentMethod, User user) {
+        this.id = (id != null) ? id : UUID.randomUUID();
+        this.createdAt = (createdAt != null) ? createdAt : LocalDateTime.now();
+
+        setAmount(amount);
+        setDescription(description);
+        setExpenseDate(expenseDate);
+        setCategory(category);
+        setCurrency(currency);
+        setPaymentMethod(paymentMethod);
+        setUser(user);
     }
 
     public void setAmount(BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
         this.amount = amount;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
+        if (description == null || description.trim().length() < 3 || description.length() > 255) {
+            throw new IllegalArgumentException("Description must be between 3 and 255 characters");
+        }
         this.description = description;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getExpenseDate() {
-        return expenseDate;
-    }
-
     public void setExpenseDate(LocalDateTime expenseDate) {
+        if (expenseDate == null || expenseDate.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Expense date must be in the past or present");
+        }
         this.expenseDate = expenseDate;
     }
 
-    public ECategory getCategory() {
-        return category;
-    }
-
     public void setCategory(ECategory category) {
+        if (category == null) throw new IllegalArgumentException("Category cannot be null");
         this.category = category;
     }
 
-    public ECurrency getCurrency() {
-        return currency;
-    }
-
     public void setCurrency(ECurrency currency) {
+        if (currency == null) throw new IllegalArgumentException("Currency cannot be null");
         this.currency = currency;
     }
 
-    public EPaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
     public void setPaymentMethod(EPaymentMethod paymentMethod) {
+        if (paymentMethod == null) throw new IllegalArgumentException("Payment method cannot be null");
         this.paymentMethod = paymentMethod;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public void setUser(User user) {
+        if (user == null) throw new IllegalArgumentException("User cannot be null");
         this.user = user;
     }
+
+    public UUID getId() { return id; }
+    public BigDecimal getAmount() { return amount; }
+    public String getDescription() { return description; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getExpenseDate() { return expenseDate; }
+    public ECategory getCategory() { return category; }
+    public ECurrency getCurrency() { return currency; }
+    public EPaymentMethod getPaymentMethod() { return paymentMethod; }
+    public User getUser() { return user; }
 }

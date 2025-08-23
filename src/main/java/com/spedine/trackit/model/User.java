@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Expense> expenses;
+    private List<ExpenseEntity> expenses;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
