@@ -18,7 +18,8 @@ class UserRepositoryImpl implements UserRepository, UserDetailsService {
     @Override
     public User save(User user) {
         UserEntity userEntity = UserEntity.fromDomain(user);
-        return userJpaRepository.save(userEntity).toDomain();
+        userJpaRepository.save(userEntity);
+        return userEntity.toDomain();
     }
 
     @Override
@@ -28,6 +29,15 @@ class UserRepositoryImpl implements UserRepository, UserDetailsService {
 
     @Override
     public User findByEmail(String email) {
-        return userJpaRepository.findUserEntityByEmail(email).toDomain();
+        UserEntity userEntity = userJpaRepository.findUserEntityByEmail(email);
+        if (userEntity == null) {
+            return null;
+        }
+        return userEntity.toDomain();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
     }
 }

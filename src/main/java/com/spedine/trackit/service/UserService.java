@@ -20,8 +20,7 @@ public class UserService {
     }
 
     public void registerUser(@Valid UserRegisterRequest body) {
-        User user = userRepository.findByEmail(body.email());
-        if (user != null) {
+        if (userRepository.existsByEmail(body.email())) {
             throw new ValidationException("User with this email already exists");
         }
         if (!body.password().equals(body.confirmPassword())) {
